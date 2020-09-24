@@ -1,1 +1,1 @@
-export {    authCheckState,    auth,    setAuthRedirectPath,    logout} from "./authAction";
+export {    authCheckState,    auth,    setAuthRedirectPath,    logout} from "./authAction";export {    getMenu,    addMenu} from './menuAction'

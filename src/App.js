@@ -1,51 +1,54 @@
 import React, {Component} from 'react';
 import './App.css';
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
+import {Route, Switch, withRouter} from 'react-router-dom';
 import asyncComponent from "./hoc/asyncComponent/asyncComponent";
 import {connect} from "react-redux";
 import * as actions from './store/actions/index'
 import Layout from "./hoc/Layout/Layout";
 import Logout from "./containers/Auth/Logout/Logout";
 
-const asyncAuth=asyncComponent(()=>{
+const asyncAuth = asyncComponent(() => {
     return import('./containers/Auth/Auth')
 });
-const asyncDashboard=asyncComponent(()=>{
+const asyncDashboard = asyncComponent(() => {
     return import('./containers/Dashboard/Dashboard')
 });
+const asyncMenu = asyncComponent(() => {
+    return import('./containers/Menu/Menu');
+});
 
-class App extends Component{
+class App extends Component {
     componentDidMount() {
         this.props.onTryAutoSignup();
     }
 
     render() {
-        let routes=(
+        let routes = (
             <Switch>
-                <Route path="/auth" component={asyncAuth} />
-                <Redirect to="/auth" />
+                <Route path="/" component={asyncAuth}/>
             </Switch>
         );
-        if(this.props.isAuthenticated){
-            routes=(
+        if (this.props.isAuthenticated) {
+            routes = (
                 <Layout>
                     <Switch>
-                        <Route path="/app/dashboard" exact component={asyncDashboard} />
-                        <Route path="/logout"  component={Logout} />
-                        <Redirect to="/app/dashboard" />
+                        <Route path="/app/dashboard" exact component={asyncDashboard}/>
+                        <Route path="/app/menu" exact component={asyncMenu}/>
+                        <Route path="/logout" component={Logout}/>
                     </Switch>
                 </Layout>
             );
         }
         return (
-                <div>
-                    {routes}
-                </div>
+            <div>
+                {routes}
+            </div>
 
 
         );
     }
 }
+
 const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.token !== null
@@ -54,10 +57,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onTryAutoSignup: () => dispatch( actions.authCheckState() )
+        onTryAutoSignup: () => dispatch(actions.authCheckState())
     };
 };
 
-export default withRouter( connect( mapStateToProps, mapDispatchToProps )( App ) );
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
 
 
