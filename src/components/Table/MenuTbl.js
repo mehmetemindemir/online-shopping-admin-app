@@ -86,7 +86,6 @@ const MenuTbl = ({className, menu, ...rest}) => {
 };
 
 function Row(props) {
-    const {row} = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
 

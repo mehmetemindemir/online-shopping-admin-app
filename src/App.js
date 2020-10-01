@@ -35,7 +35,7 @@ class App extends Component {
             routes = (
                 <Layout>
                     <Switch>
-                        <Route path="/app/dashboard" exact component={asyncDashboard}/>
+                        <Route path="/app/dashboard" component={asyncDashboard}/>
                         <Route path="/app/menu" component={asyncMenu}/>
                         <Route path="/app/brand" component={asyncBrand}/>
                         <Route path="/logout" component={Logout}/>
