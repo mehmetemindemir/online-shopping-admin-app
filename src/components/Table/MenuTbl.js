@@ -1,6 +1,4 @@
-import React, {useState} from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
+import React from 'react';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -9,7 +7,6 @@ import {
     Box,
     Card,
     IconButton,
-    makeStyles,
     Table,
     TableBody,
     TableCell,
@@ -18,56 +15,40 @@ import {
     TableRow,
 } from '@material-ui/core';
 import Typography from "@material-ui/core/Typography";
+import css from "./MenuTbl.module.css";
+import Switch from "@material-ui/core/Switch";
 
-const useRowStyles = makeStyles({
-    root: {
-        '& > *': {
-            borderBottom: 'unset',
-        },
-    },
-});
-const useStyles = makeStyles((theme) => ({
-    root: {},
-    avatar: {
-        marginRight: theme.spacing(2)
-    }
-}));
 
-const MenuTbl = ({className, menu, ...rest}) => {
-    const classes = useStyles();
-    const [limit, setLimit] = useState(10);
-    const [page, setPage] = useState(0);
-
+const MenuTbl = ({className, menu, menuRemoved, limit, page, pageChange, limitChange, ...rest}) => {
 
     const handleLimitChange = (event) => {
-        setLimit(event.target.value);
+        limitChange(event.target.value);
     };
 
     const handlePageChange = (event, newPage) => {
-        setPage(newPage);
+        pageChange(newPage);
     };
 
     return (
         <Card
-            className={clsx(classes.root, className)}
+            className={className}
             {...rest}
         >
             <PerfectScrollbar>
-                <Box minWidth={1050}>
-                    <Table>
+                <Box>
+                    <Table
+                        size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell/>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Category name</TableCell>
-                                <TableCell>Sub count</TableCell>
+                                <TableCell align="left"/>
+                                <TableCell align="left">Category name</TableCell>
+                                <TableCell align="left">status</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {menu.slice(0, limit).map((menu) => (
-                                <Row row={menu} key={menu.categoryName}/>
+                            {menu.slice(page * limit, page * limit + limit).map((menu) => (
+                                <Row row={menu} key={menu.categoryName} menuRemoved={menuRemoved}/>
                             ))}
-
                         </TableBody>
                     </Table>
                 </Box>
@@ -87,47 +68,67 @@ const MenuTbl = ({className, menu, ...rest}) => {
 
 function Row(props) {
     const [open, setOpen] = React.useState(false);
-    const classes = useRowStyles();
+
+    const handleChange = (id, status) => {
+        console.log('id ', id);
+        if (status === 1) {
+            status = 0
+        } else {
+            status = 1
+        }
+        props.menuRemoved(id, status);
+    };
+    let openIcon = <TableCell align="left"/>;
+    if (props.row.subCate.length > 0) {
+        openIcon = <TableCell align="left">
+            <IconButton style={{width: 50}} aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                {open ? <KeyboardArrowUpIcon width={10}/> : <KeyboardArrowDownIcon/>}
+            </IconButton>
+        </TableCell>
+    }
 
     return (
         <React.Fragment>
-            <TableRow className={classes.root} key={props.row.id}>
-                <TableCell>
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                    </IconButton>
-                </TableCell>
-                <TableCell>
-                    {props.row.id}
-                </TableCell>
-                <TableCell>
+            <TableRow key={props.row.id} className={props.row.status === 1 ? css.status__active : css.status__passive}>
+                {openIcon}
+                <TableCell align="left">
                     <Typography color="textPrimary" variant="body1"> {props.row.categoryName}</Typography>
                 </TableCell>
-                <TableCell>{props.row.subCate.length}</TableCell>
+                <TableCell align="left">
+                    <Switch
+                        checked={props.row.status === 1 ? true : false}
+                        onClick={() => handleChange(props.row.id, props.row.status)}
+                        className={css.switch}
+                    />
+                </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
+                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={3}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box margin={3}>
+                        <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
                                 Sub Category
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>ID</TableCell>
-                                        <TableCell>Category name</TableCell>
+                                        <TableCell align="left">Category name</TableCell>
+                                        <TableCell align="left">status</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {props.row.subCate.map((subCate) => (
                                         <TableRow key={subCate.id}>
-                                            <TableCell>
-                                                {subCate.id}
-                                            </TableCell>
-                                            <TableCell>
+                                            <TableCell align="v">
                                                 <Typography color="textPrimary"
                                                             variant="body1"> {subCate.categoryName}</Typography>
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Switch
+                                                    checked={subCate.status === 1 ? true : false}
+                                                    onClick={() => handleChange(subCate.id, subCate.status)}
+                                                    className={css.switch}
+                                                />
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -141,9 +142,5 @@ function Row(props) {
     );
 }
 
-MenuTbl.propTypes = {
-    className: PropTypes.string,
-    menu: PropTypes.array.isRequired
-};
 
 export default MenuTbl;
