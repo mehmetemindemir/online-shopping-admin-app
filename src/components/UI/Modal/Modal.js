@@ -46,7 +46,8 @@ class Modal extends Component {
         return (
             <Aux>
 
-                <Dialog onClose={this.props.modalClosed} aria-labelledby="customized-dialog-title"
+                <Dialog onClose={this.props.modalClosed} fullWidth
+                        aria-labelledby="customized-dialog-title"
                         open={this.props.show}>
                     <DialogTitle id="customized-dialog-title" onClose={this.props.modalClosed}>
                         {this.props.title}

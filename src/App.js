@@ -19,6 +19,9 @@ const asyncMenu = asyncComponent(() => {
 const asyncBrand = asyncComponent(() => {
     return import('./containers/Brand/Brand');
 });
+const asyncProduct = asyncComponent(() => {
+    return import('./containers/Product/Product')
+})
 
 class App extends Component {
     componentDidMount() {
@@ -38,6 +41,7 @@ class App extends Component {
                         <Route path="/app/dashboard" component={asyncDashboard}/>
                         <Route path="/app/menu" component={asyncMenu}/>
                         <Route path="/app/brand" component={asyncBrand}/>
+                        <Route path="/app/product" component={asyncProduct}/>
                         <Route path="/logout" component={Logout}/>
                     </Switch>
                 </Layout>

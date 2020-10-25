@@ -1,1 +1,1 @@
-export {    authCheckState,    auth,    setAuthRedirectPath,    logout} from "./authAction";export {    getMenu,    addMenu,    delMenu} from './menuAction';export {getBrand, addBrand, delBrand} from './brandAction';
+export {    authCheckState,    auth,    setAuthRedirectPath,    logout} from "./authAction";export {    getMenu,    addMenu,    delMenu} from './menuAction';export {getBrand, addBrand, delBrand} from './brandAction';export {addPhoto} from './photoAction'
