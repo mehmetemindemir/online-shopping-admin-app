@@ -22,7 +22,8 @@ export const photoProgress = (_loaded, _total) => {
     return {
         type: actions.PHOTO_PROGRESS,
         photoLoaded: _loaded,
-        photoTotal: _total,
+        photoTotal: _total
+
     }
 }
 export const addPhoto = (data) => {
@@ -30,11 +31,15 @@ export const addPhoto = (data) => {
         dispatch(photoStart());
         axios.post('admin/photo/insert', data, {
             onUploadProgress: progressEvent => {
-                dispatch(photoProgress(progressEvent.loaded, progressEvent.total))
+                dispatch(photoProgress(progressEvent.loaded, progressEvent.total));
+                //console.log("loading :", Math.round(progressEvent.loaded / progressEvent.total * 100));
             }
         })
             .then(res => {
-                dispatch(photoSuccess(res.data.data))
+                const list = new Array();
+                list.push(res.data.data);
+                dispatch(photoSuccess(list));
+                dispatch(photoProgress(0, 0))
             })
             .catch(error => {
                 dispatch(photoFail(error))
