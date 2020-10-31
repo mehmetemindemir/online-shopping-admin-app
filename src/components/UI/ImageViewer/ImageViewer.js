@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
     title: {
         color: theme.palette.primary.light,
     },
+    title2: {},
+
     titleBar: {
         background:
             'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
@@ -34,12 +36,14 @@ const ImageViewer = (props) => {
     if (props.images) {
         list = <GridList className={classes.gridList} cols={2.5}> {props.images.map((tile, index) => (
             <GridListTile key={index}>
-                <img src={tile.img} alt={tile.title}/>
+                <img src={tile.photoUrl}/>
                 <GridListTileBar
 
                     actionIcon={
-                        <IconButton aria-label={`star ${tile.title}`}>
-                            <StarBorderIcon className={classes.title}/>
+                        <IconButton onClick={() => {
+                            props.addMainImage(index)
+                        }}>
+                            <StarBorderIcon className={tile.mainPhotoFlag === 1 ? classes.title : classes.title2}/>
                         </IconButton>
                     }
                 />
