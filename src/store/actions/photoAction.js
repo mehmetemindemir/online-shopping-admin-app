@@ -32,7 +32,6 @@ export const addPhoto = (data) => {
         axios.post('admin/photo/insert', data, {
             onUploadProgress: progressEvent => {
                 dispatch(photoProgress(progressEvent.loaded, progressEvent.total));
-                //console.log("loading :", Math.round(progressEvent.loaded / progressEvent.total * 100));
             }
         })
             .then(res => {
