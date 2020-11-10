@@ -60,7 +60,7 @@ const NewSliderFrom = (props) => {
                                 image: props.photoList.photoUrl
                             }
                             props.addSlider(data);
-                            
+
 
                         } catch (e) {
                             console.log('error : ', e)
@@ -123,7 +123,7 @@ const NewSliderFrom = (props) => {
                                                 type="file"
                                             />
                                             <Button color="secondary" variant="contained" component="span">
-                                                Fotograf Ekle
+                                                Fotograf Ekle 1170x620
                                             </Button>
                                         </label>
                                     </div>
@@ -146,7 +146,7 @@ const NewSliderFrom = (props) => {
                                     type="submit"
                                     variant="contained"
                                 >
-                                    New Product
+                                    New Slider
                                 </Button>
                             </Box>
 
